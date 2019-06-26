@@ -11,7 +11,6 @@ LATEX_RUN := $(BUILTINS)/latexrun.py
 
 .PHONY: FORCE
 $(PAPER_OUT): FORCE
-	echo $(PROJ)
 	$(LATEX_RUN) $(PROJ)/paper.tex
 
 .PHONY: clean
