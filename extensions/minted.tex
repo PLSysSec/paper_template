@@ -1,0 +1,14 @@
+\usepackage{minted}
+
+\usemintedstyle{tango} % friendly ok
+\lstset{language=C,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green},
+  morecomment=[l][\color{magenta}]{\#},
+  breaklines=true,
+  basicstyle=\normalsize
+}
+
+\newcommand{\ccode}[1]{\mintinline[fontsize=\small]{c}{#1}}
+\newminted[cblock]{c}{xleftmargin=\parindent, linenos=none, breaklines=true, fontsize=\small}
