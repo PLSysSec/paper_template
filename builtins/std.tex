@@ -1,34 +1,20 @@
-% vv Peter please look at these thank you
-
-% Lots of useful math, symbols, etc.
-\usepackage{amsmath,amssymb,amsfonts,amsthm}
-% Comment environment---nothing within is typeset
-\usepackage{comment}
-% One of many approaches to simple conditionals when writing macros
-\usepackage{ifthen}
-% Alignment/frame-supporting wrapper around
-% \vbox{\hbox{...}...\hbox{...}}
-\usepackage{minibox}
-% Row-spanning table cells
-\usepackage{multirow}
-% Macros with non-alphabetic suffixes
-% WARNING: Requires e-TeX
-\usepackage{suffix}
-% 
-\usepackage{graphicx}
-\usepackage[hyphens]{url}
-\usepackage{xargs}                      % Use more than one optional parameter in a new commands
-\usepackage[capitalise]{cleveref}
-\usepackage{hyphenat}
-\usepackage{listings}
-\usepackage{subcaption}
-\usepackage{fancyvrb}
-\usepackage{xcolor}
-\usepackage{breakurl}
-\usepackage{supertabular}
-% ^^
-
-\usepackage{xspace}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Lots of useful math, symbols, etc.
+\usepackage{comment}                         % Comment environment---nothing within is typeset
+\usepackage{ifthen}                          % One of many approaches to simple conditionals when writing macros
+\usepackage{minibox}                         % Alignment/frame-supporting wrapper around \vbox{\hbox{...}...\hbox{...}}
+\usepackage{multirow}                        % Row-spanning table cells
+\usepackage{suffix}                          % Macros with non-alphabetic suffixes (Requires e-TeX)
+\usepackage{graphicx}                        % \includegraphics command to include images
+\usepackage[hyphens]{url}                    % \url command
+\usepackage{xargs}                           % \newcommandx command for defining commands with default args
+\usepackage[capitalise]{cleveref}            % \cref for automatically using the right word for refs
+\usepackage{hyphenat}                        % \hyp{} for line-wrappable hyphen, plus redefines \_ to be line-wrappable
+\usepackage{subcaption}                      % \subcaption command for captioning subfigures
+\usepackage{fancyvrb}                        % Verbatim environment: less brittle than \verb
+\usepackage{xcolor}                          % colors!
+\usepackage{breakurl}                        % line-breakable URLs
+\usepackage{supertabular}                    % supertabular environment: allows tables to flow to next page
+\usepackage{xspace}                          % fixes space after text-only macros
 
 % Proper english
 \newcommand\ie{i.e.,\xspace}
