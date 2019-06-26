@@ -1,0 +1,6 @@
+{
+    "latex-workshop.latex.external.build.command": {
+        "command": "make",
+        "args": [],
+      }
+}
