@@ -4,5 +4,6 @@ stdenv.mkDerivation {
   buildInputs = [ texlive.combined.scheme-full
                   python3
                   git
+                  jq
                 ];
 }
