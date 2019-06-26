@@ -7,6 +7,11 @@ BUILTINS := $(PROJ)/builtins
 EXTENSIONS := $(PROJ)/extensions
 LATEX_RUN := $(BUILTINS)/latexrun.py
 
+# Require VERBOSE=1 to print all the commands run
+ifndef VERBOSE
+.SILENT:
+endif
+
 .PHONY: FORCE
 $(PAPER_OUT): FORCE
 	$(LATEX_RUN) $(PROJ)/paper.tex
