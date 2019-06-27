@@ -1,0 +1,59 @@
+% Demonstration of some of our package modifications
+%
+% Currently:
+% - mathpartir
+% - grammar
+\documentclass{article}
+
+\input std
+\input mathpartir
+\input grammar
+
+\usepackage{lipsum}
+
+\begin{document}
+
+\section{mathpartir}
+
+\begin{mathpar}
+  \inferrule[Rule-A]{\mathit{premise}}{\mathit{conclusion}}
+  \inferrule[Rule-B]{\mathit{premise}}{\mathit{conclusion}}
+\end{mathpar}
+
+\lipsum[1][1]. We discuss now \LabTirName{Rule-A}. \lipsum[1][2]
+
+\lipsum[2-5]
+
+\lipsum[6][1]And before we saw it, \LabTirName{Rule-C}\lipsum[6][2]
+
+\lipsum[7-10]
+
+\lipsum[11][1]And even finally \LabTirName{Rule-B}\lipsum[11][2]
+
+\begin{mathpar}
+  \inferrule[Rule-C]{\mathit{premise}}{\mathit{conclusion}}
+\end{mathpar}
+
+\section{grammar}
+
+\resetAlignedGrammar
+\addAlignedGrammar{Values}{v}
+\addAlignedGrammar{Terms}{t}
+\addAlignedGrammar[CtxA]{\mathrm{Ctx}_A}{E}
+\setupAlignedGrammar
+
+\begin{grammar}
+  \let\syntleft=\(
+  \let\syntright=\)
+
+  <\Values> ::= $v_1$ | $v_2$
+           \alt $\cdots$
+
+  <\Terms> ::= $t_1$ | $v$
+           \alt $\cdots$
+
+  <\CtxA> ::= $[]$ | $t_1$
+          \alt $\cdots$
+\end{grammar}
+
+\end{document}
