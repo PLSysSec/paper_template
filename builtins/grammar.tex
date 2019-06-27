@@ -1,0 +1,77 @@
+% utility for making nicely aligned captioned grammars using the
+% syntax package grammar environment
+%
+% usage:
+%
+% \resetAlignedGrammar
+% \addAlignedGrammar{caption-csname}{symbol}
+% \addAlignedGrammar[csname]{caption}{symbol}
+% ...
+% \setupAlignedGrammar
+% \begin{grammar}
+%   \let\syntleft=\(
+%   \let\syntright=\)
+%   ...
+%
+% there are two forms of \addAlignedGrammar defined.  When given an
+% optional argument, it creates a command sequence named csname that
+% can be used on the LHS of a grammar production to typeset caption
+% and then a gap before symbol (to be used when we want a descriptive
+% name and a short symbol for a rule).  Since it often suffices for
+% the caption to merely be the same as the command sequence but sent
+% in a roman family, the abbreviated version without the optional
+% argument is provided for this case.
+\makeatletter
+\usepackage{syntax}
+\def\resetAlignedGrammar{\def\alignedGrammar@entries{,}}
+\def\addAlignedGrammar{%
+  \kernel@ifnextchar[\addAlignedGrammar@withOpt\addAlignedGrammar@noOpt% ]
+}
+\def\addAlignedGrammar@withOpt[#1]#2#3{%
+  \expandafter\def\csname alignedGrammar@entry@#1@fieldOne\endcsname{#2}%
+  \expandafter\def\csname alignedGrammar@entry@#1@fieldTwo\endcsname{#3}%
+  \edef\alignedGrammar@entries{#1,\alignedGrammar@entries}%
+}
+\def\addAlignedGrammar@noOpt#1#2{%
+  \expandafter\def\csname alignedGrammar@entry@#1@fieldOne\endcsname{%
+    \mathrm{#1}%
+  }%
+  \expandafter\def\csname alignedGrammar@entry@#1@fieldTwo\endcsname{#2}%
+  \edef\alignedGrammar@entries{#1,\alignedGrammar@entries}%
+}
+% we use scratch dimen 0 for calculating the width of the 1stfields
+% we use scratch dimen 2 for calculating the width of the combined fields
+% we use scratch dimen 4 inside the combined-field-calculation to measure stuff
+\def\setupAlignedGrammar{
+  \dimen0=0pt
+  \expandafter\alignedGrammar@processListOne\alignedGrammar@entries
+  \def\alignedGrammar@firstFieldWidth{\the\dimen0}
+  \dimen2=0pt
+  \expandafter\alignedGrammar@processListTwo\alignedGrammar@entries
+  \expandafter\grammarindent\expandafter=\dimen2
+  \advance\grammarindent by 2em
+}
+\def\alignedGrammar@absorbComma,{}
+\def\alignedGrammar@processListOne#1,{
+  \setbox0=\hbox{$\csname alignedGrammar@entry@#1@fieldOne\endcsname$}
+  \ifdim\wd0>\dimen0
+    \dimen0=\wd0
+  \fi
+  \kernel@ifnextchar,\alignedGrammar@absorbComma\alignedGrammar@processListOne
+}
+\def\alignedGrammar@processListTwo#1,{
+  \setbox0=\hbox{$\csname alignedGrammar@entry@#1@fieldOne\endcsname$}
+  \dimen4=\dimen0
+  \advance\dimen4 by -\wd0
+  \expandafter\def\csname#1\expandafter\endcsname\expandafter{%
+    \csname alignedGrammar@entry@#1@fieldOne\expandafter\endcsname%
+    \expandafter\hskip\the\dimen4%
+    \quad\csname alignedGrammar@entry@#1@fieldTwo\endcsname%
+  }%
+  \setbox0=\hbox{$\csname#1\endcsname$}%
+  \ifdim\wd0>\dimen2%
+    \dimen2=\wd0%
+  \fi%
+  \kernel@ifnextchar,\alignedGrammar@absorbComma\alignedGrammar@processListTwo%
+}
+\makeatother
