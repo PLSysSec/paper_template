@@ -34,8 +34,7 @@ unknown-words: $(PAPER_OUT)
 	for file in `$(BUILTINS)/ltxdeps.sh`; do \
 		words="$$(aspell list -t < "$$file")"; \
 		if [ $$? -eq 0 ]; then \
-			echo "$$file:"; \
-			echo "$$words\n"; \
+			grep --color=auto -Hn -E "$$(echo $$words | sed -e 's/ /|/g')" $$file; \
 		fi \
 	done
 
