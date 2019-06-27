@@ -2,9 +2,8 @@ PAPER_SRC=paper.tex
 PAPER_OUT=paper.pdf
 
 # DO NOT EDIT THESE DEFINITIONS
-PROJ := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUILTINS := $(PROJ)/builtins
-EXTENSIONS := $(PROJ)/extensions
+BUILTINS := builtins
+EXTENSIONS := extensions
 LATEX_RUN := $(BUILTINS)/latexrun.py
 
 # Require VERBOSE=1 to print all the commands run
@@ -12,12 +11,34 @@ ifndef VERBOSE
 .SILENT:
 endif
 
+# Always build because latexrun does fancy dependency analysis for us
 .PHONY: FORCE
 $(PAPER_OUT): FORCE
-	$(LATEX_RUN) $(PROJ)/paper.tex
+	$(LATEX_RUN) $(PAPER_SRC)
 
+# Allow `make` to just build the paper
+default: $(PAPER_OUT)
+
+# Clean out all intermediate files
 .PHONY: clean
 clean:
 	$(LATEX_RUN) --clean-all
 
-default: $(PAPER_OUT)
+
+
+# Spellchecking
+# ----------------------------
+
+# list all unknown-words
+unknown-words: $(PAPER_OUT)
+	for file in `$(BUILTINS)/ltxdeps.sh`; do \
+		cat $$file | aspell -a -t; \
+	done
+
+# Run aspell interactively on all tex files that were built into PAPER_OUT
+aspell: $(PAPER_OUT)
+	for file in `$(BUILTINS)/ltxdeps.sh`; do \
+		read -p "Press ENTER to check $$file:"; \
+		aspell check -t $$file; \
+	done
+
