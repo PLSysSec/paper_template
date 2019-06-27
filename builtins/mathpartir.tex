@@ -1,0 +1,88 @@
+\usepackage{mathpartir}
+
+% fancy cross referencing between inference rules and description
+% paragraphs.
+%
+% needs better ability to deal with rules defined after use and better
+% heuristics for which use to jump to from the rule and which
+% definition goes with which use (for multi defined rules).
+%
+% Use \LabTirName to reference a rule.
+\makeatletter
+% HACK. the manual for everyhook says that it does this, but it
+% doesn't.
+\usepackage[excludeor]{everyhook}
+\eh@everypar{\eh@prepar\the\expandafter\eh@privatepar\eh@postpar}
+\newcount\ruleref@parcount
+\ruleref@parcount0
+\PushPreHook{par}{\ruleref@newpar}
+\def\ruleref@newpar{%
+  \global\advance\ruleref@parcount by 1%
+  \edef\ruleref@lastpar{par.\the\ruleref@parcount}%
+  \expandafter\Hy@raisedlink\expandafter{\expandafter\hypertarget\expandafter{\ruleref@lastpar}{}}%
+}
+\let\ruleref@DefTirName=\DefTirName
+\let\ruleref@LabTirName=\LabTirName
+\def\ruleref@aux@namedef#1#2{%
+  \global\@namedef{ruleref@defined@#1}{#2}%
+  \immediate\write\@auxout{\global\string\@namedef{#1}{#2}}%
+}
+\def\IgnoreUnusedRule#1{
+  \expandafter\gdef\csname ruleref@unusedrule@#1\endcsname{}
+}
+\def\DefTirName#1{{%
+  \ifcsname ruleref@rulecount@#1\endcsname%
+    \expandafter\expandafter\expandafter\count@\csname ruleref@rulecount@#1\endcsname%
+    \advance\count@ by 1%
+    \expandafter\xdef\csname ruleref@rulecount@#1\endcsname{\the\count@}%
+  \else%
+    \expandafter\gdef\csname ruleref@rulecount@#1\endcsname{0}%
+    \ruleref@aux@namedef{ruleref@ruledefn@#1}{}%
+  \fi%
+  \edef\theusecmd{ruleref@use@#1@\csname ruleref@rulecount@#1\endcsname}%
+  \Hy@raisedlink{\hypertarget{rule.def.#1.\csname ruleref@rulecount@#1\endcsname}{}}%
+  \ifcsname\theusecmd\endcsname%
+    \expandafter\hyperlink\expandafter{%
+      \csname\theusecmd\endcsname%
+    }{%
+      \ruleref@DefTirName{#1}%
+    }%
+  \else%
+    \ifcsname ruleref@unusedrule@#1\endcsname%
+    \else%
+      \@latex@warning{Could not find use/explanation for #1 definition%
+        \csname ruleref@rulecount@#1\endcsname. Rerun.}%
+    \fi%
+    \ruleref@DefTirName{#1}%
+  \fi%
+}}%
+\def\LabTirName#1{{%
+  \ifcsname ruleref@unusedrule@#1\endcsname%
+    \@latex@warning{Used ``unused'' rule #1! Rerun}.%
+  \fi%
+  \ifcsname ruleref@rulecount@#1\endcsname%
+    \edef\therulecount{\csname ruleref@rulecount@#1\endcsname}%
+  \else%
+    \edef\therulecount{0}%
+    \ifcsname ruleref@ruledefn@#1\endcsname%
+    \else%
+      \@latex@warning{Could not find rule definition for #1. Rerun.}%
+    \fi%
+  \fi%
+  \edef\theusecmd{ruleref@use@#1@\therulecount}%
+  \ifcsname ruleref@defined@\theusecmd\endcsname%
+  \else%
+    \ifcsname\theusecmd\endcsname%
+      \ifnum\pdfstrcmp{\csname\theusecmd\endcsname}{par.\the\ruleref@parcount}=0
+      \else%
+        \@latex@warning{Reference changed for #1 definition
+          \therulecount. Rerun.}%
+      \fi%
+    \else%
+    \fi%
+    \ruleref@aux@namedef{\theusecmd}{par.\the\ruleref@parcount}%
+  \fi%
+  \hyperlink{rule.def.#1.\therulecount}{\ruleref@LabTirName{#1}}%
+}}%
+
+\makeatother
