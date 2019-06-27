@@ -32,7 +32,11 @@ clean:
 # list all unknown-words
 unknown-words: $(PAPER_OUT)
 	for file in `$(BUILTINS)/ltxdeps.sh`; do \
-		cat $$file | aspell -a -t; \
+		words="$$(aspell list -t < "$$file")"; \
+		if [ $$? -eq 0 ]; then \
+			echo "$$file:"; \
+			echo "$$words\n"; \
+		fi \
 	done
 
 # Run aspell interactively on all tex files that were built into PAPER_OUT
