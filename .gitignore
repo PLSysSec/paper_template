@@ -1,6 +1,7 @@
 .vscode/
 paper.pdf
 latex.out/
+_minted-paper/
 
 *~
 auto/
