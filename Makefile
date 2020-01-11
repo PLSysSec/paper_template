@@ -14,7 +14,7 @@ endif
 # Always build because latexrun does fancy dependency analysis for us
 .PHONY: FORCE
 $(PAPER_OUT): FORCE
-	$(LATEX_RUN) $(PAPER_SRC)
+	$(LATEX_RUN) --latex-args=-shell-escape $(PAPER_SRC)
 
 # Allow `make` to just build the paper
 default: $(PAPER_OUT)
