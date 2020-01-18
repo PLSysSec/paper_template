@@ -17,7 +17,7 @@ $(PAPER_OUT): FORCE
 	$(LATEX_RUN) --latex-args=-shell-escape $(PAPER_SRC)
 
 # Allow `make` to just build the paper
-default: $(PAPER_OUT)
+.DEFAULT_GOAL := $(PAPER_OUT)
 
 # Clean out all intermediate files
 .PHONY: clean
