@@ -32,9 +32,9 @@ clean:
 # list all unknown-words
 unknown-words: $(PAPER_OUT)
 	for file in `$(BUILTINS)/ltxdeps.sh`; do \
-		words="$$(aspell list -t < "$$file")"; \
+		words="$$(aspell --home-dir=./ list -t < "$$file")"; \
 		if [ $$? -eq 0 ]; then \
-			grep --color=auto -Hn -E "$$(echo $$words | sed -e 's/ /|/g')" $$file; \
+			grep --color=auto -Hn -Ew "$$(echo $$words | sed -e 's/ /|/g')" $$file; \
 		fi \
 	done
 
@@ -42,6 +42,6 @@ unknown-words: $(PAPER_OUT)
 aspell: $(PAPER_OUT)
 	for file in `$(BUILTINS)/ltxdeps.sh`; do \
 		read -p "Press ENTER to check $$file:"; \
-		aspell check -t $$file; \
+		aspell --home-dir=./ check -t $$file; \
 	done
 
