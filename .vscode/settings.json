@@ -1,6 +1,7 @@
 {
-    "latex-workshop.latex.external.build.command": {
-        "command": "make",
-        "args": [],
-      }
+    "latex-workshop.latex.external.build.command": "make",
+    "latex-workshop.latex.external.build.args": [
+      "--ignore-errors",
+      "with-log"
+    ]
 }

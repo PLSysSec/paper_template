@@ -24,7 +24,11 @@ $(PAPER_OUT): FORCE
 clean:
 	$(LATEX_RUN) --clean-all
 
-
+# Useful for editor integrations. Will output the full build log
+# rather than the just the abbreviated latexrun output.
+# You will need to use the --ignore-errors flag though
+with-log: $(PAPER_OUT)
+	cat ./latex.out/$(basename $(notdir $(PAPER_SRC))).log
 
 # Spellchecking
 # ----------------------------
