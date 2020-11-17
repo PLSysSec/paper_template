@@ -3,5 +3,6 @@ paper.pdf
 latex.out/
 _minted-paper/
 
-*~
+**/*~
+**/.*.swp
 auto/
