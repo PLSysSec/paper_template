@@ -15,6 +15,10 @@
 \usepackage{xcolor}                          % colors!
 \usepackage{supertabular}                    % supertabular environment: allows tables to flow to next page
 \usepackage{xspace}                          % fixes space after text-only macros
+\usepackage{microtype}                       % typographical refinements
+
+% Hyperlink wrapping
+\hypersetup{breaklinks=true}
 
 % Proper english
 \newcommand\ie{i.e.,\xspace}
@@ -23,10 +27,22 @@
 \newcommand\Eg{E.g.,\xspace}
 
 % Drafting macros
-\newcommand{\TODO}[1]{{\color{red}#1}}
-\newcommand{\REDO}[1]{{\color{violet}#1}}
-\newcommand{\tocite}[1]{{\color{red}[#1]}}
+\newcommand{\todo}[1]{{\color{red}#1}}
+\newcommand{\redo}[1]{{\color{violet}#1}}
+% adding a prefix else its too easy to miss
+\newcommand{\tocite}[1]{{TOCITE:\color{red}[#1]}}
 \newcommand{\ignore}[1]{}
 
 % Paragraph "subsubsubsection"
 \newcommand{\mypara}[1]{\smallskip\noindent\emph{\textbf{{#1.}}}}
+
+% A fancy dash
+\def\dash---{\kern.16667em---\penalty\exhyphenpenalty\hskip.16667em\relax}
+
+% A compact list
+\newenvironment{CompactItemize}%
+  {\begin{list}{$\blacktriangleright$}%
+    {\leftmargin=\parindent \itemsep=2pt \topsep=2pt
+     \parsep=0pt \partopsep=0pt}}%
+  {\end{list}}
+\renewcommand{\labelitemi}{$\blacktriangleright$}

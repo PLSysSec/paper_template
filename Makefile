@@ -1,40 +1,58 @@
 PAPER_SRC=paper.tex
 PAPER_OUT=paper.pdf
 
-# DO NOT EDIT THESE DEFINITIONS
 BUILTINS := builtins
 EXTENSIONS := extensions
-LATEX_RUN := $(BUILTINS)/latexrun.py
+
+# Either specify USE_LATEXRUN=1 when calling the makefile or
+# uncomment the next line if you prefer the LATEXRUN python tool
+# USE_LATEXRUN:=1
+
+LATEXRUN := $(BUILTINS)/latexrun.py --latex-args=-shell-escape
+LATEXMK := latexmk -pdf -shell-escape -outdir="latex.out"
 
 # Require VERBOSE=1 to print all the commands run
 ifndef VERBOSE
 .SILENT:
 endif
 
-# Always build because latexrun does fancy dependency analysis for us
-.PHONY: FORCE
-$(PAPER_OUT): FORCE
-	$(LATEX_RUN) --latex-args=-shell-escape $(PAPER_SRC)
+# Always build because the latex tool does fancy dependency analysis for us
+.PHONY: build
+build:
+	rm -f paper.pdf
+ifdef USE_LATEXRUN
+		$(LATEXRUN) $(PAPER_SRC)
+else
+		$(LATEXMK) $(PAPER_SRC)
+endif
+	cp latex.out/paper.pdf paper.pdf
 
 # Allow `make` to just build the paper
-.DEFAULT_GOAL := $(PAPER_OUT)
+.DEFAULT_GOAL := build
 
-# Clean out all intermediate files
 .PHONY: clean
 clean:
-	$(LATEX_RUN) --clean-all
+	rm -f paper.pdf
+ifdef USE_LATEXRUN
+		$(LATEXRUN) --clean-all
+else
+		$(LATEXMK) -C
+endif
+	rm -f *.aux *.bbl *.dvi
 
 # Useful for editor integrations. Will output the full build log
 # rather than the just the abbreviated latexrun output.
 # You will need to use the --ignore-errors flag though
-with-log: $(PAPER_OUT)
+.PHONY: with-log
+with-log: build
 	cat ./latex.out/$(basename $(notdir $(PAPER_SRC))).log
 
 # Spellchecking
 # ----------------------------
 
 # list all unknown-words
-unknown-words: $(PAPER_OUT)
+.PHONY: unknown-words
+unknown-words: build
 	for file in `$(BUILTINS)/ltxdeps.sh`; do \
 		words="$$(aspell --home-dir=./ list -t < "$$file")"; \
 		if [ $$? -eq 0 ]; then \
@@ -43,7 +61,8 @@ unknown-words: $(PAPER_OUT)
 	done
 
 # Run aspell interactively on all tex files that were built into PAPER_OUT
-aspell: $(PAPER_OUT)
+.PHONY: aspell
+aspell: build
 	for file in `$(BUILTINS)/ltxdeps.sh`; do \
 		read -p "Press ENTER to check $$file:"; \
 		aspell --home-dir=./ check -t $$file; \
