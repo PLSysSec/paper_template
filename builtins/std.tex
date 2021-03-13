@@ -30,11 +30,11 @@
 \newcommand{\todo}[1]{{\color{red}#1}}
 \newcommand{\redo}[1]{{\color{violet}#1}}
 % adding a prefix else its too easy to miss
-\newcommand{\tocite}[1]{{TOCITE:\color{red}[#1]}}
+\newcommand{\tocite}[1]{{\color{red}[TOCITE:#1]}}
 \newcommand{\ignore}[1]{}
 
 % Paragraph "subsubsubsection"
-\newcommand{\mypara}[1]{\smallskip\noindent\emph{\textbf{{#1.}}}}
+\newcommand{\para}[1]{\smallskip\noindent\textbf{{#1.}\xspace}}
 
 % A fancy dash
 \def\dash---{\kern.16667em---\penalty\exhyphenpenalty\hskip.16667em\relax}
