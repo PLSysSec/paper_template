@@ -19,13 +19,13 @@ endif
 # Always build because the latex tool does fancy dependency analysis for us
 .PHONY: build
 build:
-	rm -f paper.pdf
+	rm -f $(PAPER_OUT)
 ifdef USE_LATEXRUN
 		$(LATEXRUN) $(PAPER_SRC)
 else
 		$(LATEXMK) $(PAPER_SRC)
 endif
-	cp latex.out/paper.pdf paper.pdf
+	cp latex.out/$(PAPER_OUT) $(PAPER_OUT)
 
 # Allow `make` to just build the paper
 .DEFAULT_GOAL := build
