@@ -32,7 +32,7 @@ endif
 
 .PHONY: clean
 clean:
-	rm -f paper.pdf
+	rm -f $(PAPER_OUT)
 ifdef USE_LATEXRUN
 		$(LATEXRUN) --clean-all
 else
